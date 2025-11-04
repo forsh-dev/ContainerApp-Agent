@@ -1,0 +1,8 @@
+# Environment files with secrets
+.env
+
+# Runner working directory
+_work/
+
+# Docker volumes
+*.tar.gz
