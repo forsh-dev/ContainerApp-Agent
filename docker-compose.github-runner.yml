@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  github-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.github-runner
+      args:
+        RUNNER_VERSION: 2.321.0
+    image: github-runner:latest
+    container_name: github-runner
+    environment:
+      # Required: Set your GitHub organization or repository URL
+      - GITHUB_URL=${GITHUB_URL:-https://github.com/your-org}
+      
+      # Required: Set your GitHub Personal Access Token
+      # For security, set this via environment variable: export GITHUB_TOKEN=your_token
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      
+      # Optional: Customize runner name (defaults to container hostname)
+      - RUNNER_NAME=${RUNNER_NAME:-docker-runner}
+      
+      # Optional: Customize runner labels (comma-separated)
+      - RUNNER_LABELS=${RUNNER_LABELS:-self-hosted,Linux,X64,docker}
+      
+      # Optional: Set runner group (defaults to "Default")
+      - RUNNER_GROUP=${RUNNER_GROUP:-Default}
+      
+      # Optional: Set working directory (defaults to "_work")
+      - RUNNER_WORKDIR=${RUNNER_WORKDIR:-_work}
+    
+    restart: unless-stopped
+    
+    # Optional: Mount volumes for persistent storage or Docker-in-Docker
+    # volumes:
+    #   - runner-work:/home/runner/_work
+    #   - /var/run/docker.sock:/var/run/docker.sock  # For Docker-in-Docker (use with caution)
+
+# Optional: Define volumes for persistent storage
+# volumes:
+#   runner-work:
